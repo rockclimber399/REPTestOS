@@ -24,9 +24,10 @@ class PnumaControl
 private:
   // bool push = false; //boolean for push enable
   // bool pull = false; //boolean for pull enable
+  int pushPin; //arduino pin for push solenoid
+  int pullPin; //arduino pin for pull solenoid
 public:
   PnumaControl(int pushIn, int pullIn);
-
   ~PnumaControl();
 
   int pushPin;                     //arduino pin for push solenoid
