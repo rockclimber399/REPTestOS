@@ -1,10 +1,12 @@
 #include "REPTestOS.h"
+#include "Util.h"
 
 //global variable definitions
+Util util;
 PnumaControl pnuma1(9, 10);
 
-REPTestOS::REPTestOS(/* args */){}; //constructor
-REPTestOS::~REPTestOS(){};          //destructor
+REPTestOS::REPTestOS(){};  //constructor
+REPTestOS::~REPTestOS(){}; //destructor
 
 void REPTestOS::bootOS() //boot operating system function. To run in startup
 {
@@ -29,27 +31,27 @@ void REPTestOS::runOS() //constantly runs in loop
 
 void CALLBACK_FUNCTION cycleFrequency(int id)
 {
-  pnuma1.cyclesPerSecond = int(menuTestSettingsCyclesPerSecond.getAsFloatingPointValue());
+  pnuma1.cyclesPerSecond = int(menuTestSettingsCyclesPerSecond.getAsFloatingPointValue()); //update pnuma1 with value
 }
 
 void CALLBACK_FUNCTION pullControl(int id)
 {
-  pnuma1.pull = menuTestSettingsPull.getBoolean();
+  pnuma1.setMode(menuTestSettingsPush.getBoolean(), menuTestSettingsPull.getBoolean()); //update pnuma1 with mode
 }
 
 void CALLBACK_FUNCTION pushControl(int id)
 {
-  pnuma1.pull = menuTestSettingsPull.getBoolean();
+  pnuma1.setMode(menuTestSettingsPush.getBoolean(), menuTestSettingsPull.getBoolean()); //update pnuma1 with mode
 }
 
 void CALLBACK_FUNCTION stopTest(int id)
 {
-  // TODO - your menu change code
+  pnuma1.running = false;
 }
 
 void CALLBACK_FUNCTION startTest(int id)
 {
-  menuTotalCycles.setTextValue(menuTestSettingsPull.getBoolean());
+  pnuma1.running = true;
 }
 
 void CALLBACK_FUNCTION maxRunTime(int id)
@@ -58,16 +60,6 @@ void CALLBACK_FUNCTION maxRunTime(int id)
 }
 
 void CALLBACK_FUNCTION maxCycles(int id)
-{
-  // TODO - your menu change code
-}
-
-void CALLBACK_FUNCTION totalCycles(int id)
-{
-  //
-}
-
-void CALLBACK_FUNCTION runTimer(int id)
 {
   // TODO - your menu change code
 }
@@ -84,12 +76,4 @@ void CALLBACK_FUNCTION saveTestSettings(int id)
 ----------------------------------------------------------*/
 
 //use itoa(int, array, 10) to convert int to const char*
-
-String returnString(bool input)
-{
-  if (input)
-  {
-    return "True";
-  }
-  return "False";
-}
+//from bool to const char* menuTotalCycles.setTextValue(util.returnCharPFromBool(menuTestSettingsPull.getBoolean()));

@@ -1,6 +1,6 @@
 {
   "lastEdited": {
-    "seconds": 1611871409,
+    "seconds": 1611941565,
     "nanos": 0
   },
   "codeOptions": {
@@ -85,7 +85,7 @@
         "readOnly": true,
         "localOnly": false,
         "visible": true,
-        "functionName": "totalCycles",
+        "functionName": "",
         "itemType": "PLAIN_TEXT",
         "textLength": 9
       }
@@ -100,7 +100,7 @@
         "readOnly": false,
         "localOnly": false,
         "visible": true,
-        "functionName": "runTimer",
+        "functionName": "",
         "itemType": "TIME_24H",
         "textLength": 1
       }

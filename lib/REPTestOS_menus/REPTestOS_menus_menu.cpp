@@ -40,9 +40,9 @@ const AnyMenuInfo PROGMEM minfoStopTest = { "Stop Test", 10, 0xFFFF, 0, stopTest
 ActionMenuItem menuStopTest(&minfoStopTest, &menuTestSettings);
 const AnyMenuInfo PROGMEM minfoStartTest = { "Start Test", 1, 0xFFFF, 0, startTest };
 ActionMenuItem menuStartTest(&minfoStartTest, &menuStopTest);
-RENDERING_CALLBACK_NAME_INVOKE(fnRunTimeRtCall, timeItemRenderFn, "Run Time", 21, runTimer)
+RENDERING_CALLBACK_NAME_INVOKE(fnRunTimeRtCall, timeItemRenderFn, "Run Time", 21, NO_CALLBACK)
 TimeFormattedMenuItem menuRunTime(fnRunTimeRtCall, 8, (MultiEditWireType)EDITMODE_TIME_24H, &menuStartTest);
-RENDERING_CALLBACK_NAME_INVOKE(fnTotalCyclesRtCall, textItemRenderFn, "Total Cycles", 33, totalCycles)
+RENDERING_CALLBACK_NAME_INVOKE(fnTotalCyclesRtCall, textItemRenderFn, "Total Cycles", 33, NO_CALLBACK)
 TextMenuItem menuTotalCycles(fnTotalCyclesRtCall, 7, 9, &menuRunTime);
 
 

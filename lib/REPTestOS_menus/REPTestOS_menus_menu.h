@@ -20,8 +20,8 @@
 #include <EditableLargeNumberMenuItem.h>
 #include "tcMenuLiquidCrystal.h"
 
-void setupMenu();  // forward reference of the menu setup function.
-extern const PROGMEM ConnectorLocalInfo applicationInfo;  // defines the app info to the linker.
+void setupMenu();                                        // forward reference of the menu setup function.
+extern const PROGMEM ConnectorLocalInfo applicationInfo; // defines the app info to the linker.
 
 // Global variables that need exporting
 
@@ -50,9 +50,7 @@ void CALLBACK_FUNCTION stopTest(int id);
 extern ActionMenuItem menuStopTest;
 void CALLBACK_FUNCTION startTest(int id);
 extern ActionMenuItem menuStartTest;
-void CALLBACK_FUNCTION runTimer(int id);
 extern TimeFormattedMenuItem menuRunTime;
-void CALLBACK_FUNCTION totalCycles(int id);
 extern TextMenuItem menuTotalCycles;
 
 #endif // MENU_GENERATED_CODE_H
