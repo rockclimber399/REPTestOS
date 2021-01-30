@@ -23,6 +23,13 @@ void REPTestOS::runOS() //constantly runs in loop
   taskManager.runLoop(); //handler for menu system task management
 }
 
+uint8_t taskId = taskManager.scheduleOnce(3000, doThing);
+
+void doThing()
+{
+  menuTotalCycles.setTextValue(util.returnCharPFromBool(menuTestSettingsPull.getBoolean()));
+};
+
 /*----------------------------------------------------------
 ------------------------------------------------------------
 ----------------- Menu System Handlers ---------------------
