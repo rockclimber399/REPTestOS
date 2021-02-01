@@ -15,9 +15,8 @@ public:
   ~REPTestOS(); //destructor function
 
   //other public functions/variables
-  void bootOS();       //boot the operating system and all dependants
-  void runOS();        //runOS() needs to be in main Loop.
-  void makeActuator(); //create a new actuator instance
+  void bootOS(); //boot the operating system and all dependants
+  void runOS();  //runOS() needs to be in main Loop
 };
 
 #endif

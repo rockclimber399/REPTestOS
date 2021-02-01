@@ -1,4 +1,5 @@
 #include "PnumaControl.h"
+PnumaControl pnuma1(9, 10);
 
 PnumaControl globalPnuma(9,10);
 
@@ -16,8 +17,8 @@ void PnumaControl::setup()
 {
     pinMode(pushPin, OUTPUT);
     pinMode(pullPin, OUTPUT);
-    digitalWrite(pushPin, LOW);
-    digitalWrite(pullPin, LOW);
+    digitalWrite(pushPin, HIGH);
+    digitalWrite(pullPin, HIGH);
 }
 void PnumaControl::control()
 {
@@ -30,30 +31,50 @@ void PnumaControl::control()
 
         if (timeDelta > freq)
         {
-            setNextCycle();           //update state based off of mode
-            actuate();                //fire updated actuation state
+            this->setNextCycle();     //update state based off of mode
+            this->actuate();          //fire updated actuation state
             lastActuation = millis(); //reset timer
         }
     }
+    else
+    {
+        status = off;
+        this->actuate();
+    }
 };
-void PnumaControl::setMode(bool pushEnable, bool pullEnable)
+String PnumaControl::setMode(bool pushEnable, bool pullEnable)
 {
     if (pushEnable && pullEnable)
     {
         mode = pushAndPull;
+        return "pushAndPull";
     }
     else if (!pushEnable && !pullEnable)
     {
         mode = none;
+        return "none";
     }
     else if (!pushEnable && pullEnable)
     {
         mode = pullOnly;
+        return "pullOnly";
     }
     else if (pushEnable && !pullEnable)
     {
         mode = pushOnly;
+        return "pushOnly";
     }
+    else
+    {
+        mode = none;
+        return "none";
+    }
+}
+
+bool PnumaControl::setRunning(bool run)
+{
+    running = run;
+    return running;
 }
 void PnumaControl::setNextCycle()
 {
@@ -129,20 +150,20 @@ void PnumaControl::actuate()
     switch (status)
     {
     case off:
-        digitalWrite(pushPin, LOW);
-        digitalWrite(pullPin, LOW);
+        digitalWrite(pushPin, HIGH);
+        digitalWrite(pullPin, HIGH);
         break;
     case on:
-        digitalWrite(pushPin, HIGH);
-        digitalWrite(pullPin, HIGH);
+        digitalWrite(pushPin, LOW);
+        digitalWrite(pullPin, LOW);
         break;
     case in:
-        digitalWrite(pushPin, LOW);
-        digitalWrite(pullPin, HIGH);
-        break;
-    case out:
         digitalWrite(pushPin, HIGH);
         digitalWrite(pullPin, LOW);
+        break;
+    case out:
+        digitalWrite(pushPin, LOW);
+        digitalWrite(pullPin, HIGH);
         break;
     default:
         break;
