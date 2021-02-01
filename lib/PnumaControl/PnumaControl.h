@@ -30,8 +30,8 @@ public:
   PnumaControl(int pushIn, int pullIn);
   ~PnumaControl();
 
-  int pushPin;                     //arduino pin for push solenoid
-  int pullPin;                     //arduino pin for pull solenoid
+  // int pushPin;                     //arduino pin for push solenoid
+  // int pullPin;                     //arduino pin for pull solenoid
   int cyclesPerSecond;             //rate of actuation
   bool running = false;            //trigger for actuation
   unsigned long baseClock;         //timer
@@ -45,5 +45,7 @@ public:
   void setNextCycle();                            //sets the state of the actuator's next movement based on push/pull enables and current state
   void actuate();                                 //handles actuator state logic to fire actuator as needed
 };
+
+extern PnumaControl globalPnuma;
 
 #endif

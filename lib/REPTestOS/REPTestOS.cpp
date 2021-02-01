@@ -14,7 +14,7 @@ void REPTestOS::bootOS() //boot operating system function. To run in startup
   setupMenu();               //Initialize menu system
   Serial.begin(9600);        // initialize serial communication at 9600 bits per second:
   Serial.println("Booting"); //small serial indicator during boot phase
-
+  globalPnuma.actuate();
   //Start remaining items
 }
 
@@ -31,6 +31,7 @@ void REPTestOS::runOS() //constantly runs in loop
 
 void CALLBACK_FUNCTION cycleFrequency(int id)
 {
+  globalPnuma.actuate();
   pnuma1.cyclesPerSecond = int(menuTestSettingsCyclesPerSecond.getAsFloatingPointValue()); //update pnuma1 with value
 }
 

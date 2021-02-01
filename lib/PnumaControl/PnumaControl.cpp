@@ -1,5 +1,7 @@
 #include "PnumaControl.h"
 
+PnumaControl globalPnuma(9,10);
+
 PnumaControl::PnumaControl(int pushIn, int pullIn)
 {
     pushPin = pushIn; //constructor requires push and pull actuator pin #'s, set to private

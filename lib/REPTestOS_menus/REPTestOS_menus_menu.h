@@ -6,51 +6,65 @@
 
     All the variables you may need access to are marked extern in this file for easy
     use elsewhere.
-*/
+ */
 
 #ifndef MENU_GENERATED_CODE_H
 #define MENU_GENERATED_CODE_H
 
 #include <Arduino.h>
 #include <tcMenu.h>
-#include <RuntimeMenuItem.h>
+
 #include <Wire.h>
 #include <LiquidCrystalIO.h>
 #include <IoAbstractionWire.h>
+#include <RuntimeMenuItem.h>
 #include <EditableLargeNumberMenuItem.h>
 #include "tcMenuLiquidCrystal.h"
 
-void setupMenu();                                        // forward reference of the menu setup function.
-extern const PROGMEM ConnectorLocalInfo applicationInfo; // defines the app info to the linker.
+// all define statements needed
+#define LCD_WIDTH 20
+#define LCD_HEIGHT 4
+#define I2C_ADDRESS 0x27
+#define PIN_LAYOUT RS_RW_EN
+#define WIRE_VARIABLE Wire
+#define PULLUP_LOGIC true
+#define INTERRUPT_SWITCHES false
+#define SWITCH_IODEVICE 
+#define ENCODER_PIN_A 2
+#define ENCODER_PIN_B 3
+#define ENCODER_PIN_OK 8
 
-// Global variables that need exporting
-
+// all variables that need exporting
 extern LiquidCrystal lcd;
 extern LiquidCrystalRenderer renderer;
+
+// all menu item forward references.
+extern ActionMenuItem menuTestSettingsSaveTestSettings;
+extern EditableLargeNumberMenuItem menuTestSettingsMaxCycles;
+extern TimeFormattedMenuItem menuTestSettingsMaxRunTime;
+extern AnalogMenuItem menuTestSettingsCyclesPerSecond;
+extern BooleanMenuItem menuTestSettingsPull;
+extern BooleanMenuItem menuTestSettingsPush;
+extern BackMenuItem menuBackTestSettings;
+extern SubMenuItem menuTestSettings;
+extern ActionMenuItem menuStopTest;
+extern ActionMenuItem menuStartTest;
+extern TimeFormattedMenuItem menuRunTime;
+extern TextMenuItem menuTotalCycles;
+extern const ConnectorLocalInfo applicationInfo;
 
 // Callback functions must always include CALLBACK_FUNCTION after the return type
 #define CALLBACK_FUNCTION
 
-// Global Menu Item exports
-
-void CALLBACK_FUNCTION saveTestSettings(int id);
-extern ActionMenuItem menuTestSettingsSaveTestSettings;
-void CALLBACK_FUNCTION maxCycles(int id);
-extern EditableLargeNumberMenuItem menuTestSettingsMaxCycles;
-void CALLBACK_FUNCTION maxRunTime(int id);
-extern TimeFormattedMenuItem menuTestSettingsMaxRunTime;
 void CALLBACK_FUNCTION cycleFrequency(int id);
-extern AnalogMenuItem menuTestSettingsCyclesPerSecond;
+void CALLBACK_FUNCTION maxCycles(int id);
+void CALLBACK_FUNCTION maxRunTime(int id);
 void CALLBACK_FUNCTION pullControl(int id);
-extern BooleanMenuItem menuTestSettingsPull;
 void CALLBACK_FUNCTION pushControl(int id);
-extern BooleanMenuItem menuTestSettingsPush;
-extern SubMenuItem menuTestSettings;
-void CALLBACK_FUNCTION stopTest(int id);
-extern ActionMenuItem menuStopTest;
+void CALLBACK_FUNCTION saveTestSettings(int id);
 void CALLBACK_FUNCTION startTest(int id);
-extern ActionMenuItem menuStartTest;
-extern TimeFormattedMenuItem menuRunTime;
-extern TextMenuItem menuTotalCycles;
+void CALLBACK_FUNCTION stopTest(int id);
+
+void setupMenu();
 
 #endif // MENU_GENERATED_CODE_H
