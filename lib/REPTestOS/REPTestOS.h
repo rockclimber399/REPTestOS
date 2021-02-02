@@ -4,6 +4,8 @@
 #include "REPTestOS_menus_menu.h"
 #include "PnumaControl.h"
 
+#define E_STOP digitalRead(13)
+
 //The function of this is to marry the whole system. Bringing in the LCD menusystem, as well as pnumatic control,
 //and any sensors that may be necessary, and the logic of behavior. Menu Logic will exist within "MenuSystem_menu.h"
 
@@ -18,5 +20,6 @@ public:
   void bootOS(); //boot the operating system and all dependants
   void runOS();  //runOS() needs to be in main Loop
 };
+
 
 #endif

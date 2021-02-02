@@ -32,35 +32,48 @@
 #define SWITCH_IODEVICE 
 #define ENCODER_PIN_A 2
 #define ENCODER_PIN_B 3
-#define ENCODER_PIN_OK 8
+#define ENCODER_PIN_OK 4
 
 // all variables that need exporting
 extern LiquidCrystal lcd;
 extern LiquidCrystalRenderer renderer;
 
 // all menu item forward references.
-extern ActionMenuItem menuTestSettingsSaveTestSettings;
+extern ActionMenuItem menuResetTotalCycles;
+extern ActionMenuItem menuManualActuationOn;
+extern ActionMenuItem menuManualActuationOff;
+extern ActionMenuItem menuManualActuationRetract;
+extern ActionMenuItem menuManualActuationExtend;
+extern BackMenuItem menuBackManualActuation;
+extern SubMenuItem menuManualActuation;
+extern ActionMenuItem menuTestSettingsSaveSettings;
+extern TimeFormattedMenuItem menuTestSettingsMaxTime;
 extern EditableLargeNumberMenuItem menuTestSettingsMaxCycles;
-extern TimeFormattedMenuItem menuTestSettingsMaxRunTime;
 extern AnalogMenuItem menuTestSettingsCyclesPerSecond;
 extern BooleanMenuItem menuTestSettingsPull;
 extern BooleanMenuItem menuTestSettingsPush;
 extern BackMenuItem menuBackTestSettings;
 extern SubMenuItem menuTestSettings;
+extern ActionMenuItem menuResetTest;
 extern ActionMenuItem menuStopTest;
 extern ActionMenuItem menuStartTest;
-extern TimeFormattedMenuItem menuRunTime;
+extern TimeFormattedMenuItem menuTimeRem;
 extern TextMenuItem menuTotalCycles;
 extern const ConnectorLocalInfo applicationInfo;
 
 // Callback functions must always include CALLBACK_FUNCTION after the return type
 #define CALLBACK_FUNCTION
 
+void CALLBACK_FUNCTION allOff(int id);
 void CALLBACK_FUNCTION cycleFrequency(int id);
+void CALLBACK_FUNCTION extend(int id);
 void CALLBACK_FUNCTION maxCycles(int id);
 void CALLBACK_FUNCTION maxRunTime(int id);
+void CALLBACK_FUNCTION onHold(int id);
 void CALLBACK_FUNCTION pullControl(int id);
 void CALLBACK_FUNCTION pushControl(int id);
+void CALLBACK_FUNCTION resetTest(int id);
+void CALLBACK_FUNCTION retract(int id);
 void CALLBACK_FUNCTION saveTestSettings(int id);
 void CALLBACK_FUNCTION startTest(int id);
 void CALLBACK_FUNCTION stopTest(int id);

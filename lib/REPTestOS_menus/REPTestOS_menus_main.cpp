@@ -1,63 +1,87 @@
 // #include "REPTestOS_menus_menu.h"
 
-// void setup() {
+// void setup()
+// {
 //     setupMenu();
-
 // }
 
-// void loop() {
+// void loop()
+// {
 //     taskManager.runLoop();
-
 // }
 
-
-// void CALLBACK_FUNCTION stopTest(int id) {
-//     // TODO - your menu change code
+// void CALLBACK_FUNCTION stopTest(int id)
+// {
+//   // TODO - your menu change code
 // }
 
-
-// void CALLBACK_FUNCTION pullControl(int id) {
-//     // TODO - your menu change code
+// void CALLBACK_FUNCTION pullControl(int id)
+// {
+//   // TODO - your menu change code
 // }
 
-
-// void CALLBACK_FUNCTION saveTestSettings(int id) {
-//     // TODO - your menu change code
+// void CALLBACK_FUNCTION saveTestSettings(int id)
+// {
+//   // TODO - your menu change code
 // }
 
-
-// void CALLBACK_FUNCTION totalCycles(int id) {
-//     // TODO - your menu change code
+// void CALLBACK_FUNCTION totalCycles(int id)
+// {
+//   // TODO - your menu change code
 // }
 
-
-// void CALLBACK_FUNCTION cycleFrequency(int id) {
-//     // TODO - your menu change code
+// void CALLBACK_FUNCTION cycleFrequency(int id)
+// {
+//   // TODO - your menu change code
 // }
 
-
-// void CALLBACK_FUNCTION runTimer(int id) {
-//     // TODO - your menu change code
+// void CALLBACK_FUNCTION runTimer(int id)
+// {
+//   // TODO - your menu change code
 // }
 
-
-// void CALLBACK_FUNCTION pushControl(int id) {
-//     // TODO - your menu change code
+// void CALLBACK_FUNCTION pushControl(int id)
+// {
+//   // TODO - your menu change code
 // }
 
-
-// void CALLBACK_FUNCTION maxRunTime(int id) {
-//     // TODO - your menu change code
+// void CALLBACK_FUNCTION maxRunTime(int id)
+// {
+//   // TODO - your menu change code
 // }
 
-
-// void CALLBACK_FUNCTION maxCycles(int id) {
-//     // TODO - your menu change code
+// void CALLBACK_FUNCTION maxCycles(int id)
+// {
+//   // TODO - your menu change code
 // }
 
-
-// void CALLBACK_FUNCTION startTest(int id) {
-//     // TODO - your menu change code
+// void CALLBACK_FUNCTION startTest(int id)
+// {
+//   // TODO - your menu change code
 // }
 
+// void CALLBACK_FUNCTION extend(int id)
+// {
+//   // TODO - your menu change code
+// }
+
+// void CALLBACK_FUNCTION retract(int id)
+// {
+//   // TODO - your menu change code
+// }
+
+// void CALLBACK_FUNCTION onHold(int id)
+// {
+//   // TODO - your menu change code
+// }
+
+// void CALLBACK_FUNCTION allOff(int id)
+// {
+//   // TODO - your menu change code
+// }
+
+// void CALLBACK_FUNCTION resetTest(int id)
+// {
+//   // TODO - your menu change code
+// }
 

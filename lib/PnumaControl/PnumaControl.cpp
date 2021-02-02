@@ -1,7 +1,9 @@
 #include "PnumaControl.h"
-PnumaControl pnuma1(9, 10);
+#include "REPTestOS_menus_menu.h"
 
-PnumaControl globalPnuma(9,10);
+#define E_STOP digitalRead(13)
+
+PnumaControl pnuma1(44, 45);
 
 PnumaControl::PnumaControl(int pushIn, int pullIn)
 {
@@ -17,57 +19,79 @@ void PnumaControl::setup()
 {
     pinMode(pushPin, OUTPUT);
     pinMode(pullPin, OUTPUT);
-    digitalWrite(pushPin, HIGH);
-    digitalWrite(pullPin, HIGH);
+    digitalWrite(pushPin, LOW);
+    digitalWrite(pullPin, LOW);
 }
-void PnumaControl::control()
+void PnumaControl::control(testParams &testConditions)
 {
-    if (running)
+    if (!E_STOP)
     {
-        baseClock = millis();                                //update clock
-        unsigned long timeDelta = baseClock - lastActuation; //find time difference between last actuation
-
-        int freq = 1000 / cyclesPerSecond; //compare to desired frequency
-
-        if (timeDelta > freq)
+        if (running)
         {
-            this->setNextCycle();     //update state based off of mode
-            this->actuate();          //fire updated actuation state
-            lastActuation = millis(); //reset timer
+            if (testConditions.cyclesRemaining > 0)
+            {
+                baseClock = millis();                                //update clock
+                unsigned long timeDelta = baseClock - lastActuation; //find time difference between last actuation
+
+                unsigned int freq = 1000 / cyclesPerSecond; //compare to desired frequency
+                if (timeDelta > freq)
+                {
+                    Serial.println("we're firing");
+                    setNextCycle();                   //update state based off of mode
+                    actuate();                        //fire updated actuation state
+                    lastActuation = millis();         //reset timer
+                    testConditions.cyclesRemaining--; //decrement cycles remaining.
+                    testConditions.cyclesExecuted++;  //increment cycles executed
+                    menuTotalCycles.setTextValue(itoa((testConditions.cyclesExecuted), "xxx", 10));
+                }
+            }
+            if (testConditions.cyclesRemaining == 0)
+            {
+            }
+
+            baseClock = millis(); //update clock
+            unsigned int secondTimeDelta = baseClock - secondTimer;
+            if (secondTimeDelta > 1000)
+            {
+                testConditions.decSecond();
+                menuTimeRem.setTime(testConditions.timeRemaining);
+                menuTimeRem.setChanged(true);
+                secondTimer = millis(); //reset second timer
+            }
+        }
+        else if (!running)
+        {
+            //handle machine in not running test mode
         }
     }
-    else
-    {
-        status = off;
-        this->actuate();
-    }
-};
-String PnumaControl::setMode(bool pushEnable, bool pullEnable)
+}
+
+ActuatorMode PnumaControl::setMode(bool pushEnable, bool pullEnable)
 {
     if (pushEnable && pullEnable)
     {
         mode = pushAndPull;
-        return "pushAndPull";
+        return mode;
     }
     else if (!pushEnable && !pullEnable)
     {
         mode = none;
-        return "none";
+        return mode;
     }
     else if (!pushEnable && pullEnable)
     {
         mode = pullOnly;
-        return "pullOnly";
+        return mode;
     }
     else if (pushEnable && !pullEnable)
     {
         mode = pushOnly;
-        return "pushOnly";
+        return mode;
     }
     else
     {
         mode = none;
-        return "none";
+        return mode;
     }
 }
 
@@ -85,55 +109,70 @@ void PnumaControl::setNextCycle()
         {
         case off:
             status = out;
+            break;
         case on:
             status = out;
+            break;
         case in:
             status = out;
+            break;
         case out:
             status = off;
             break;
         default:
             break;
         }
+        break;
     case pullOnly:
         switch (status)
         {
         case off:
             status = in;
+            break;
         case on:
             status = in;
+            break;
         case in:
             status = off;
+            break;
         case out:
             status = in;
             break;
         default:
             break;
         }
+        break;
     case pushAndPull:
         switch (status)
         {
         case off:
             status = out;
+            break;
         case on:
             status = out;
+            break;
         case in:
             status = out;
+            break;
         case out:
             status = in;
             break;
         default:
             break;
         }
+        break;
     case none:
         switch (status)
         {
         case off:
             status = off;
+            break;
         case on:
             status = off;
+            break;
         case in:
             status = off;
+            break;
         case out:
             status = off;
             break;
@@ -145,27 +184,68 @@ void PnumaControl::setNextCycle()
         break;
     }
 }
+
+ActuatorState PnumaControl::setState(ActuatorState setValue)
+{
+    status = setValue;
+    return status;
+}
+
+int PnumaControl::setCyclesPerSecond(int setCyclesVal)
+{
+    cyclesPerSecond = setCyclesVal;
+    return cyclesPerSecond;
+}
+
+int PnumaControl::getCyclesPerSecond()
+{
+    return cyclesPerSecond;
+}
 void PnumaControl::actuate()
 {
     switch (status)
     {
     case off:
-        digitalWrite(pushPin, HIGH);
-        digitalWrite(pullPin, HIGH);
+        digitalWrite(pushPin, LOW);
+        digitalWrite(pullPin, LOW);
         break;
     case on:
-        digitalWrite(pushPin, LOW);
-        digitalWrite(pullPin, LOW);
+        digitalWrite(pushPin, HIGH);
+        digitalWrite(pullPin, HIGH);
         break;
     case in:
-        digitalWrite(pushPin, HIGH);
-        digitalWrite(pullPin, LOW);
-        break;
-    case out:
         digitalWrite(pushPin, LOW);
         digitalWrite(pullPin, HIGH);
+        break;
+    case out:
+        digitalWrite(pushPin, HIGH);
+        digitalWrite(pullPin, LOW);
         break;
     default:
         break;
+    }
+}
+
+void PnumaControl::pushToggle(bool toggleValue)
+{
+    if (toggleValue)
+    {
+        digitalWrite(pushPin, HIGH);
+    }
+    else
+    {
+        digitalWrite(pushPin, LOW);
+    }
+}
+
+void PnumaControl::pullToggle(bool toggleValue)
+{
+    if (toggleValue)
+    {
+        digitalWrite(pullPin, HIGH);
+    }
+    else
+    {
+        digitalWrite(pullPin, LOW);
     }
 }
