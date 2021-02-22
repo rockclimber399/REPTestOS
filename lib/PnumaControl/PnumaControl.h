@@ -2,6 +2,7 @@
 #define PNUMACONTROL_H
 
 #include "Arduino.h"
+#include "structs/structs.h"
 
 enum ActuatorState
 {
@@ -34,25 +35,32 @@ private:
   int keyStatus;        //holds key position, 0 off (left), 1 Neutral (middle), 2 on (right)
   bool eStop = false;   //eStop loop state
 
+  bool running = false;       //trigger for actuation
+  int cyclesPerSecond;        //rate of actuation
+  ActuatorState status = off; //used for tracking actuator state
+  ActuatorMode mode = none;   //used for tracking actuation mode
+
+  unsigned long baseClock;         //timer
+  unsigned long lastActuation = 0; //time of last actuation
+  unsigned long secondTimer = 0;
+
   int verifyStatus(); //functrion to check all hardware status, returns error code.
 
 public:
   PnumaControl(int pushIn, int pullIn);
   ~PnumaControl();
 
-  int cyclesPerSecond; //rate of actuation
-
-  unsigned long baseClock;         //timer
-  unsigned long lastActuation = 0; //time of last actuation
-  ActuatorState status = off;      //used for tracking actuator state
-  ActuatorMode mode = none;        //used for tracking actuation mode
-
-  void setup();                                     //function to set pins of object on boot.
-  void control();                                   //primary control handler, must run in loop
-  String setMode(bool pushEnable, bool pullEnable); //sets ActuatorMode based off of settings
-  void setNextCycle();                              //sets the state of the actuator's next movement based on push/pull enables and current state
-  void actuate();                                   //handles actuator state logic to fire actuator as needed
-  bool setRunning(bool);
+  void setup();                                           //function to set pins of object on boot.
+  void control(testParams &);                             //primary control handler, must run in loop
+  ActuatorMode setMode(bool pushEnable, bool pullEnable); //sets ActuatorMode based off of parameters
+  ActuatorState setState(ActuatorState);                  //sets ActuatorState
+  void setNextCycle();                                    //sets the state of the actuator's next movement based on push/pull enables and current state
+  void actuate();                                         //handles actuator state logic to fire actuator as needed
+  bool setRunning(bool);                                  //updates private "running" value
+  void pushToggle(bool);                                  //enables push toggle
+  void pullToggle(bool);                                  //enables pull toggle
+  int setCyclesPerSecond(int);                            //set then return cycles/second
+  int getCyclesPerSecond();                               //return cyclesPerSecond
 };
 
 extern PnumaControl pnuma1;

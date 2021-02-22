@@ -6,56 +6,72 @@
 
     All the variables you may need access to are marked extern in this file for easy
     use elsewhere.
-*/
+ */
 
-#include <Arduino.h>
 #include <tcMenu.h>
 #include "REPTestOS_menus_menu.h"
 
 // Global variable declarations
 
-const PROGMEM ConnectorLocalInfo applicationInfo = { "REP Test OS V1", "e2546280-7452-4879-8faa-2c4fe5c2809f" };
 LiquidCrystal lcd(0, 1, 2, 4, 5, 6, 7);
 LiquidCrystalRenderer renderer(lcd, 20, 4);
 
 // Global Menu Item declarations
 
-const AnyMenuInfo PROGMEM minfoTestSettingsSaveTestSettings = { "Save Test Settings", 12, 0xFFFF, 0, saveTestSettings };
-ActionMenuItem menuTestSettingsSaveTestSettings(&minfoTestSettingsSaveTestSettings, NULL);
+const PROGMEM AnyMenuInfo minfoResetTotalCycles = { "Reset Total Cycles", 19, 0xffff, 0, NO_CALLBACK };
+ActionMenuItem menuResetTotalCycles(&minfoResetTotalCycles, NULL);
+const PROGMEM AnyMenuInfo minfoManualActuationOn = { "On", 17, 0xffff, 0, onHold };
+ActionMenuItem menuManualActuationOn(&minfoManualActuationOn, NULL);
+const PROGMEM AnyMenuInfo minfoManualActuationOff = { "Off", 16, 0xffff, 0, allOff };
+ActionMenuItem menuManualActuationOff(&minfoManualActuationOff, &menuManualActuationOn);
+const PROGMEM AnyMenuInfo minfoManualActuationRetract = { "Retract", 15, 0xffff, 0, retract };
+ActionMenuItem menuManualActuationRetract(&minfoManualActuationRetract, &menuManualActuationOff);
+const PROGMEM AnyMenuInfo minfoManualActuationExtend = { "Extend", 14, 0xffff, 0, extend };
+ActionMenuItem menuManualActuationExtend(&minfoManualActuationExtend, &menuManualActuationRetract);
+RENDERING_CALLBACK_NAME_INVOKE(fnManualActuationRtCall, backSubItemRenderFn, "Manual Actuation", -1, NO_CALLBACK)
+const PROGMEM SubMenuInfo minfoManualActuation = { "Manual Actuation", 13, 0xffff, 0, NO_CALLBACK };
+BackMenuItem menuBackManualActuation(fnManualActuationRtCall, &menuManualActuationExtend);
+SubMenuItem menuManualActuation(&minfoManualActuation, &menuBackManualActuation, &menuResetTotalCycles);
+const PROGMEM AnyMenuInfo minfoTestSettingsSaveSettings = { "Save Settings", 12, 0xffff, 0, saveTestSettings };
+ActionMenuItem menuTestSettingsSaveSettings(&minfoTestSettingsSaveSettings, NULL);
+RENDERING_CALLBACK_NAME_INVOKE(fnTestSettingsMaxTimeRtCall, timeItemRenderFn, "Max Time", 17, maxRunTime)
+TimeFormattedMenuItem menuTestSettingsMaxTime(fnTestSettingsMaxTimeRtCall, 9, (MultiEditWireType)2, &menuTestSettingsSaveSettings);
 RENDERING_CALLBACK_NAME_INVOKE(fnTestSettingsMaxCyclesRtCall, largeNumItemRenderFn, "Max Cycles", 25, maxCycles)
-EditableLargeNumberMenuItem menuTestSettingsMaxCycles(fnTestSettingsMaxCyclesRtCall, 11, 6, 0, false, &menuTestSettingsSaveTestSettings);
-RENDERING_CALLBACK_NAME_INVOKE(fnTestSettingsMaxRunTimeRtCall, timeItemRenderFn, "Max Run Time", 17, maxRunTime)
-TimeFormattedMenuItem menuTestSettingsMaxRunTime(fnTestSettingsMaxRunTimeRtCall, 9, (MultiEditWireType)EDITMODE_TIME_24H, &menuTestSettingsMaxCycles);
-const AnalogMenuInfo PROGMEM minfoTestSettingsCyclesPerSecond = { "Cycles Per Second", 6, 6, 10, cycleFrequency, 0, 1, "" };
-AnalogMenuItem menuTestSettingsCyclesPerSecond(&minfoTestSettingsCyclesPerSecond, 0, &menuTestSettingsMaxRunTime);
-const BooleanMenuInfo PROGMEM minfoTestSettingsPull = { "Pull", 4, 5, 1, pullControl, NAMING_TRUE_FALSE };
+EditableLargeNumberMenuItem menuTestSettingsMaxCycles(fnTestSettingsMaxCyclesRtCall, 11, 6, 0, false, &menuTestSettingsMaxTime);
+const PROGMEM AnalogMenuInfo minfoTestSettingsCyclesPerSecond = { "Cycles Per Second", 6, 6, 10, cycleFrequency, 0, 1, "" };
+AnalogMenuItem menuTestSettingsCyclesPerSecond(&minfoTestSettingsCyclesPerSecond, 0, &menuTestSettingsMaxCycles);
+const PROGMEM BooleanMenuInfo minfoTestSettingsPull = { "Pull", 4, 5, 1, pullControl, NAMING_TRUE_FALSE };
 BooleanMenuItem menuTestSettingsPull(&minfoTestSettingsPull, false, &menuTestSettingsCyclesPerSecond);
-const BooleanMenuInfo PROGMEM minfoTestSettingsPush = { "Push", 3, 4, 1, pushControl, NAMING_TRUE_FALSE };
+const PROGMEM BooleanMenuInfo minfoTestSettingsPush = { "Push", 3, 4, 1, pushControl, NAMING_TRUE_FALSE };
 BooleanMenuItem menuTestSettingsPush(&minfoTestSettingsPush, false, &menuTestSettingsPull);
-const SubMenuInfo PROGMEM minfoTestSettings = { "Test Settings", 2, 0xFFFF, 0, NO_CALLBACK };
 RENDERING_CALLBACK_NAME_INVOKE(fnTestSettingsRtCall, backSubItemRenderFn, "Test Settings", -1, NO_CALLBACK)
+const PROGMEM SubMenuInfo minfoTestSettings = { "Test Settings", 2, 0xffff, 0, NO_CALLBACK };
 BackMenuItem menuBackTestSettings(fnTestSettingsRtCall, &menuTestSettingsPush);
-SubMenuItem menuTestSettings(&minfoTestSettings, &menuBackTestSettings, NULL);
-const AnyMenuInfo PROGMEM minfoStopTest = { "Stop Test", 10, 0xFFFF, 0, stopTest };
-ActionMenuItem menuStopTest(&minfoStopTest, &menuTestSettings);
-const AnyMenuInfo PROGMEM minfoStartTest = { "Start Test", 1, 0xFFFF, 0, startTest };
+SubMenuItem menuTestSettings(&minfoTestSettings, &menuBackTestSettings, &menuManualActuation);
+const PROGMEM AnyMenuInfo minfoResetTest = { "Reset Test", 18, 0xffff, 0, resetTest };
+ActionMenuItem menuResetTest(&minfoResetTest, &menuTestSettings);
+const PROGMEM AnyMenuInfo minfoStopTest = { "Stop Test", 10, 0xffff, 0, stopTest };
+ActionMenuItem menuStopTest(&minfoStopTest, &menuResetTest);
+const PROGMEM AnyMenuInfo minfoStartTest = { "Start Test", 1, 0xffff, 0, startTest };
 ActionMenuItem menuStartTest(&minfoStartTest, &menuStopTest);
-RENDERING_CALLBACK_NAME_INVOKE(fnRunTimeRtCall, timeItemRenderFn, "Run Time", 21, NO_CALLBACK)
-TimeFormattedMenuItem menuRunTime(fnRunTimeRtCall, 8, (MultiEditWireType)EDITMODE_TIME_24H, &menuStartTest);
+RENDERING_CALLBACK_NAME_INVOKE(fnTimeRemRtCall, timeItemRenderFn, "Time Rem", 21, NO_CALLBACK)
+TimeFormattedMenuItem menuTimeRem(fnTimeRemRtCall, 8, (MultiEditWireType)2, &menuStartTest);
 RENDERING_CALLBACK_NAME_INVOKE(fnTotalCyclesRtCall, textItemRenderFn, "Total Cycles", 33, NO_CALLBACK)
-TextMenuItem menuTotalCycles(fnTotalCyclesRtCall, 7, 9, &menuRunTime);
-
+TextMenuItem menuTotalCycles(fnTotalCyclesRtCall, 7, 9, &menuTimeRem);
+const PROGMEM ConnectorLocalInfo applicationInfo = { "REP Test OS V1", "e2546280-7452-4879-8faa-2c4fe5c2809f" };
 
 // Set up code
 
 void setupMenu() {
-    menuTotalCycles.setReadOnly(true);
-
     Wire.begin();
     lcd.setIoAbstraction(ioFrom8574(0x27, 0xff, &Wire));
     lcd.begin(20, 4);
     lcd.configureBacklightPin(3);
     lcd.backlight();
     switches.initialise(internalDigitalIo(), true);
-    menuMgr.initForEncoder(&renderer, &menuTotalCycles, 2, 3, 8);
+    menuMgr.initForEncoder(&renderer, &menuTotalCycles, 2, 3, 4);
+
+    // Read only and local only function calls
+    menuTotalCycles.setReadOnly(true);
 }
+
