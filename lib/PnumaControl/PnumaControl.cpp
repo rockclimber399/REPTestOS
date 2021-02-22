@@ -1,5 +1,5 @@
 #include "PnumaControl.h"
-PnumaControl pnuma1(9, 10);
+PnumaControl pnuma1(44, 45);
 
 PnumaControl::PnumaControl(int pushIn, int pullIn)
 {
@@ -20,6 +20,8 @@ void PnumaControl::setup()
 }
 void PnumaControl::control()
 {
+    //check all hardware status, if error, exit with code, otherwise execute loop.
+
     if (running)
     {
         baseClock = millis();                                //update clock
@@ -40,6 +42,30 @@ void PnumaControl::control()
         this->actuate();
     }
 };
+
+/* Error Codes
+    1 -- running set to false
+*/
+int PnumaControl::verifyStatus()
+{
+    if (!running)
+    {
+        return 1;
+    }
+    if (!running)
+    {
+        return 1;
+    }
+    if (!running)
+    {
+        return 1;
+    }
+    if (!running)
+    {
+        return 1;
+    }
+}
+
 String PnumaControl::setMode(bool pushEnable, bool pullEnable)
 {
     if (pushEnable && pullEnable)

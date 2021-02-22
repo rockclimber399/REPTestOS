@@ -24,9 +24,18 @@ class PnumaControl
 private:
   // bool push = false; //boolean for push enable
   // bool pull = false; //boolean for pull enable
-  int pushPin;          //arduino pin for push solenoid
-  int pullPin;          //arduino pin for pull solenoid
+  int pushPin; //arduino pin for push solenoid
+  int pullPin; //arduino pin for pull solenoid
+  int keyOffPin;
+  int keyOnPin;
+  int startButtonPin;
+
   bool running = false; //trigger for actuation
+  int keyStatus;        //holds key position, 0 off (left), 1 Neutral (middle), 2 on (right)
+  bool eStop = false;   //eStop loop state
+
+  int verifyStatus(); //functrion to check all hardware status, returns error code.
+
 public:
   PnumaControl(int pushIn, int pullIn);
   ~PnumaControl();

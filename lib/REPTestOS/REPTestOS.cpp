@@ -1,8 +1,8 @@
 #include "REPTestOS.h"
-#include "Util.h"
 
 //global variable definitions
 Util util;
+OSStatus osStatus;
 
 REPTestOS::REPTestOS(){};  //constructor
 REPTestOS::~REPTestOS(){}; //destructor
@@ -14,6 +14,7 @@ void REPTestOS::bootOS() //boot operating system function. To run in startup
   Serial.begin(9600);        // initialize serial communication at 9600 bits per second:
   Serial.println("Booting"); //small serial indicator during boot phase
   pnuma1.setup();            //setup function for pins for pnuma 1
+  setupControls();           //setup function for this OS to configure pins
   //Start remaining items
 }
 
@@ -21,6 +22,23 @@ void REPTestOS::runOS() //constantly runs in loop
 {
   taskManager.runLoop(); //handler for menu system task management
   pnuma1.control();
+}
+
+bool REPTestOS::getKeyState(){
+
+}; //function to check current key state.
+
+void REPTestOS::setupControls()
+{
+  osStatus.keyOffPin = 46;      //set keyOffPin
+  osStatus.keyOnPin = 47;       //set keyOnPin
+  osStatus.startButtonPin = 48; //set startuButtonPin
+  osStatus.eStopPin = 13;       //set eStopPin
+  osStatus.pressurePin = 12;    //set pressurePin
+
+  pinMode(osStatus.keyOffPin, );
+  pinMode(osStatus.keyOnPin);
+  pinMode(osStatus.startButtonPin)
 }
 
 /*----------------------------------------------------------
