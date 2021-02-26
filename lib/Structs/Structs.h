@@ -8,6 +8,7 @@ struct testParams
   int totalCycles;
   int cyclesRemaining;
   int cyclesExecuted;
+  int minPressure;
 
   int daysRemaining;
 
@@ -63,6 +64,35 @@ struct testParams
     Serial.println(timeRemaining.hours);
     Serial.println(timeRemaining.minutes);
     Serial.println(timeRemaining.seconds);
+  }
+};
+
+struct OSStatus
+{
+  bool running = false;
+  bool lowPressure = false;
+  int keyStatus;
+
+  int keyOffPin;
+  int keyOnPin;
+  int startButtonPin;
+  int eStopPin;
+  int pressurePin;
+
+  bool eStop()
+  {
+    return digitalRead(eStopPin);
+  }
+
+  int currentPressure()
+  {
+    return analogRead(pressurePin);
+  }
+
+  bool setRunning(bool runSetStatus)
+  {
+    running = runSetStatus;
+    return running;
   }
 };
 

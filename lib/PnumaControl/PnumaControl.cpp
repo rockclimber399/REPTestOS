@@ -22,50 +22,47 @@ void PnumaControl::setup()
     digitalWrite(pushPin, LOW);
     digitalWrite(pullPin, LOW);
 }
-void PnumaControl::control(testParams &testConditions)
+void PnumaControl::control(testParams &testConditions, bool systemCheck)
 {
     //check all hardware status, if error, exit with code, otherwise execute loop.
 
-    if (!E_STOP)
+    if (systemCheck)
     {
-        if (running)
+        if (testConditions.cyclesRemaining > 0)
         {
-            if (testConditions.cyclesRemaining > 0)
-            {
-                baseClock = millis();                                //update clock
-                unsigned long timeDelta = baseClock - lastActuation; //find time difference between last actuation
+            baseClock = millis();                                //update clock
+            unsigned long timeDelta = baseClock - lastActuation; //find time difference between last actuation
 
-                unsigned int freq = 1000 / cyclesPerSecond; //compare to desired frequency
-                if (timeDelta > freq)
-                {
-                    Serial.println("we're firing");
-                    setNextCycle();                   //update state based off of mode
-                    actuate();                        //fire updated actuation state
-                    lastActuation = millis();         //reset timer
-                    testConditions.cyclesRemaining--; //decrement cycles remaining.
-                    testConditions.cyclesExecuted++;  //increment cycles executed
-                    menuTotalCycles.setTextValue(itoa((testConditions.cyclesExecuted), "xxx", 10));
-                }
-            }
-            if (testConditions.cyclesRemaining == 0)
+            unsigned int freq = 1000 / cyclesPerSecond; //compare to desired frequency
+            if (timeDelta > freq)
             {
-            }
-
-            baseClock = millis(); //update clock
-            unsigned int secondTimeDelta = baseClock - secondTimer;
-            if (secondTimeDelta > 1000)
-            {
-                testConditions.decSecond();
-                menuTimeRem.setTime(testConditions.timeRemaining);
-                menuTimeRem.setChanged(true);
-                secondTimer = millis(); //reset second timer
+                Serial.println("we're firing");
+                setNextCycle();                   //update state based off of mode
+                actuate();                        //fire updated actuation state
+                lastActuation = millis();         //reset timer
+                testConditions.cyclesRemaining--; //decrement cycles remaining.
+                testConditions.cyclesExecuted++;  //increment cycles executed
+                menuTotalCycles.setTextValue(itoa((testConditions.cyclesExecuted), "xxx", 10));
             }
         }
-        else if (!running)
+        if (testConditions.cyclesRemaining == 0)
         {
-            //handle machine in not running test mode
+        }
+
+        baseClock = millis(); //update clock
+        unsigned int secondTimeDelta = baseClock - secondTimer;
+        if (secondTimeDelta > 1000)
+        {
+            testConditions.decSecond();
+            menuTimeRem.setTime(testConditions.timeRemaining);
+            menuTimeRem.setChanged(true);
+            secondTimer = millis(); //reset second timer
         }
     }
+    // else if (!running)
+    // {
+    //     //handle machine in not running test mode
+    // }
     else
     {
         status = off;
@@ -78,25 +75,11 @@ void PnumaControl::control(testParams &testConditions)
 */
 int PnumaControl::verifyStatus()
 {
-    if (!running)
-    {
-        return 1;
-    }
-    if (!running)
-    {
-        return 1;
-    }
-    if (!running)
-    {
-        return 1;
-    }
-    if (!running)
-    {
-        return 1;
-    }
+    //do a thing
+    return 0;
 }
 
-String PnumaControl::setMode(bool pushEnable, bool pullEnable)
+ActuatorMode PnumaControl::setMode(bool pushEnable, bool pullEnable)
 {
     if (pushEnable && pullEnable)
     {
@@ -125,11 +108,11 @@ String PnumaControl::setMode(bool pushEnable, bool pullEnable)
     }
 }
 
-bool PnumaControl::setRunning(bool run)
-{
-    running = run;
-    return running;
-}
+// bool PnumaControl::setRunning(bool run)
+// {
+//     running = run;
+//     return running;
+// }
 void PnumaControl::setNextCycle()
 {
     switch (mode)
