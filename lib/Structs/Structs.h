@@ -5,9 +5,9 @@
 
 struct testParams
 {
-  int totalCycles;
-  int cyclesRemaining;
-  int cyclesExecuted;
+  long totalCycles;
+  long cyclesRemaining;
+  long cyclesExecuted;
   int minPressure;
 
   int daysRemaining;
@@ -53,17 +53,18 @@ struct testParams
 
   void setBySeconds(long seconds)
   {
+    Serial.println(seconds);
     long minutes = seconds / 60;
     long hours = minutes / 60;
     long days = hours / 24;
-    this->daysRemaining = days;
-    this->timeRemaining.hours = int(days % 24);
-    this->timeRemaining.minutes = int(hours % 60);
-    this->timeRemaining.seconds = int(minutes % 60);
-    Serial.println(daysRemaining);
-    Serial.println(timeRemaining.hours);
-    Serial.println(timeRemaining.minutes);
-    Serial.println(timeRemaining.seconds);
+    this->daysRemaining = int(days);
+    this->timeRemaining.hours = int(hours % 24);
+    this->timeRemaining.minutes = int(minutes % 60);
+    this->timeRemaining.seconds = int(seconds % 60);
+    Serial.println(this->daysRemaining);
+    Serial.println(this->timeRemaining.hours);
+    Serial.println(this->timeRemaining.minutes);
+    Serial.println(this->timeRemaining.seconds);
   }
 };
 
@@ -77,11 +78,16 @@ struct OSStatus
   int keyOnPin;
   int startButtonPin;
   int eStopPin;
+  int eStopPin2;
   int pressurePin;
 
   bool eStop()
   {
-    return digitalRead(eStopPin);
+    if (digitalRead(eStopPin) || digitalRead(eStopPin2))
+    {
+      return true;
+    }
+    return false;
   }
 
   int currentPressure()

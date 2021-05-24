@@ -5,6 +5,7 @@
 #include "PnumaControl.h"
 #include "Util.h"
 #include "Structs.h"
+#include "config.h"
 
 //The function of this is to marry the whole system. Bringing in the LCD menusystem, as well as pnumatic control,
 //and any sensors that may be necessary, and the logic of behavior. Menu Logic will exist within "MenuSystem_menu.h"

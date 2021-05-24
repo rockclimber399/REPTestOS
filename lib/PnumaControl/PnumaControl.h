@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "Structs.h"
+#include "../Util/config.h"
 
 enum ActuatorState
 {
@@ -53,10 +54,10 @@ public:
   void setNextCycle();                                    //sets the state of the actuator's next movement based on push/pull enables and current state
   void actuate();                                         //handles actuator state logic to fire actuator as needed
   // bool setRunning(bool);                                  //updates private "running" value
-  void pushToggle(bool);                                  //enables push toggle
-  void pullToggle(bool);                                  //enables pull toggle
-  int setCyclesPerSecond(int);                            //set then return cycles/second
-  int getCyclesPerSecond();                               //return cyclesPerSecond
+  void pushToggle(bool);       //enables push toggle
+  void pullToggle(bool);       //enables pull toggle
+  int setCyclesPerSecond(int); //set then return cycles/second
+  int getCyclesPerSecond();    //return cyclesPerSecond
 };
 
 extern PnumaControl pnuma1;

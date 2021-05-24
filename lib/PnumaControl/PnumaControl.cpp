@@ -1,9 +1,9 @@
 #include "PnumaControl.h"
 #include "REPTestOS_menus_menu.h"
 
-#define E_STOP digitalRead(13)
+// #define E_STOP digitalRead(13)
 
-PnumaControl pnuma1(44, 45);
+PnumaControl pnuma1(_pnuma1PushPin, _pnuma1PullPin);
 
 PnumaControl::PnumaControl(int pushIn, int pullIn)
 {
